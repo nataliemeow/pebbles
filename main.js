@@ -241,6 +241,7 @@ canvas.addEventListener('touchstart', e => {
 	})
 });
 canvas.addEventListener('touchmove', e => {
+	e.preventDefault();
 	lastTouch = e.touches[0];
 	mouseMove({
 		clientX: e.touches[0].clientX,
