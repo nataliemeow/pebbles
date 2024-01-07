@@ -195,6 +195,10 @@ function mouseUp(e) {
 	pebbleN++;
 }
 
+function undo() {
+	alert('Undo is not yet supported.');
+}
+
 function zoomOut() {
 	cellScale = Vector.sub(cellScale, new Vector(16, 16));
 	draw();
