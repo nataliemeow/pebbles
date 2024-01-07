@@ -48,7 +48,7 @@ let pebbles = [
 let pebbleN = 2;
 
 let size = new Vector(document.documentElement.clientWidth, document.documentElement.clientHeight);
-let cellScale = new Vector(48, 48);
+let cellScale = Vector.mul(new Vector(48, 48), new Vector(devicePixelRatio, devicePixelRatio));
 
 let pan = new Vector(size.x / 2, size.y / 2);
 
@@ -90,11 +90,11 @@ function drawPebble(pebble) {
 	ctx.stroke();
 	
 	ctx.fillStyle = 'black';
-	ctx.font = `${cellScale.x / 2}px "Latin Modern Roman", "CMU Serif", Georgia, "Times New Roman", Times, serif`;
+	ctx.font = `${cellScale.x / 2}px "Charis SIL", "Latin Modern Roman", "CMU Serif", P052, "Palatino Linotype", Palatino, Georgia, "Times New Roman", Times, serif`;
 	ctx.fontStyle = 'bold'
 	ctx.textAlign = 'center';
 	ctx.textBaseline = 'middle';
-	ctx.fillText(pebble.n, drawXy.x, drawXy.y, cellScale.x)
+	ctx.fillText(pebble.n, drawXy.x, drawXy.y, cellScale.x * .75)
 }
 
 function draw() {
@@ -222,5 +222,34 @@ setInterval(draw, 500);
 canvas.addEventListener('mousedown', mouseDown);
 canvas.addEventListener('mousemove', mouseMove);
 canvas.addEventListener('mouseup', mouseUp);
+
+// touchscreen compatibility glue
+
+let lastTouch = null;
+
+canvas.addEventListener('touchstart', e => {
+	lastTouch = e.touches[0];
+	mouseDown({
+		clientX: e.touches[0].clientX,
+		clientY: e.touches[0].clientY,
+		touch: true
+	})
+});
+canvas.addEventListener('touchmove', e => {
+	lastTouch = e.touches[0];
+	mouseMove({
+		clientX: e.touches[0].clientX,
+		clientY: e.touches[0].clientY,
+		touch: true
+	})
+});
+canvas.addEventListener('touchend', e => {
+	if (!lastTouch) return;
+	mouseUp({
+		clientX: lastTouch.clientX,
+		clientY: lastTouch.clientY,
+		touch: true
+	})
+});
 
 document.addEventListener('keydown', keyDown);
