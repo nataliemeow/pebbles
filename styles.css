@@ -35,7 +35,7 @@ body {
 	bottom: 4px;
 	border: 1px solid #AAAAAA;
 	background: linear-gradient(#EEEEEE, #CCCCCC);
-	font: 1vw "Menlo", monospace;
+	font: 20px "Menlo", monospace;
 	color: black;
 	padding: 0 .3em;
 	border-radius: 4px;

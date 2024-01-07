@@ -50,6 +50,8 @@ let pebbleN = 2;
 let size = new Vector(document.documentElement.clientWidth, document.documentElement.clientHeight);
 let cellScale = Vector.mul(new Vector(48, 48), new Vector(devicePixelRatio, devicePixelRatio));
 
+const font = `"Charis SIL", "Latin Modern Roman", "CMU Serif", P052, "Palatino Linotype", Palatino, Georgia, "Times New Roman", Times, serif`;
+
 let pan = new Vector(size.x / 2, size.y / 2);
 
 let isMouseDown = false;
@@ -64,7 +66,7 @@ function setCursor(cursor) {
 let currentCursor;
 setCursor('pointer');
 
-function drawPebble(pebble) {
+function drawPebble(pebble, faint) {
 	let drawXy = Vector.add(
 		Vector.mul(
 			Vector.add(pebble.xy, new Vector(.5, .5)),
@@ -79,7 +81,7 @@ function drawPebble(pebble) {
 	)
 		return;
 
-	ctx.strokeStyle = pebble.color;
+	ctx.strokeStyle = pebble.color + (faint ? '88' : 'ff');
 	ctx.lineWidth = Math.floor(cellScale.x / 16);
 	ctx.beginPath();
 	ctx.arc(
@@ -89,15 +91,14 @@ function drawPebble(pebble) {
 	);
 	ctx.stroke();
 	
-	ctx.fillStyle = 'black';
-	ctx.font = `${cellScale.x / 2}px "Charis SIL", "Latin Modern Roman", "CMU Serif", P052, "Palatino Linotype", Palatino, Georgia, "Times New Roman", Times, serif`;
-	ctx.fontStyle = 'bold'
+	ctx.fillStyle = faint ? '#888888' : 'black';
+	ctx.font = `${cellScale.x / 2}px ${font}`;
 	ctx.textAlign = 'center';
 	ctx.textBaseline = 'middle';
 	ctx.fillText(pebble.n, drawXy.x, drawXy.y, cellScale.x * .75)
 }
 
-function draw() {
+function draw(pebbleXy) {
 	size = new Vector(document.documentElement.clientWidth, document.documentElement.clientHeight);
 	canvas.width = size.x;
 	canvas.height = size.y;
@@ -112,6 +113,12 @@ function draw() {
 
 	for (let pebble of pebbles)
 		drawPebble(pebble);
+	
+	ctx.fillStyle = 'black';
+	ctx.font = `${80 * devicePixelRatio}px ${font}`;
+	ctx.textAlign = 'center';
+	ctx.textBaseline = 'bottom';
+	ctx.fillText(pebbleN, size.x / 2, size.y - 30 * devicePixelRatio);
 }
 
 function mouseDown(e) {
@@ -146,13 +153,6 @@ function mouseMove(e) {
 		mouseDrag(e);
 		return;
 	}
-
-	let mouseXy = new Vector(e.clientX, e.clientY);
-	
-	if (prevMouseXy === mouseXy) return;
-
-	let pebbleXy = Vector.floor(Vector.div(Vector.sub(mouseXy, pan), cellScale));
-	pebbleXy
 }
 
 function mouseUp(e) {
@@ -189,14 +189,19 @@ function mouseUp(e) {
 	}
 	if (total !== pebbleN)
 		return;
+	
 	pebbles.push(pebble);
-	drawPebble(pebble);
 	
 	pebbleN++;
+	draw();
 }
 
 function undo() {
-	alert('Undo is not yet supported.');
+	if (!pebbles.find(p => p.n > 1)) return;
+
+	pebbles.pop();
+	pebbleN--;
+	draw();
 }
 
 function zoomOut() {
@@ -209,7 +214,7 @@ function zoomIn() {
 }
 
 function keyDown(e) {
-	if (e.code === 'KeyU') return;
+	if (e.code === 'KeyU') undo();
 	if (e.code === 'KeyZ') zoomOut();
 	if (e.code === 'KeyX') zoomIn();
 }
