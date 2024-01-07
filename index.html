@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name='viewport' content='width=device-width, initial-scale=1' />
+		<meta name='charset' content='utf-8' />
+		<link rel='stylesheet' href='styles.css' />
+		<title>The Pebble Game</title>
+	</head>
+	<body>
+		<canvas width='800' height='800' id='canvas'></canvas>
+		<aside id='controls'>
+			<button>
+				<img src='undo.png' alt='undo' onclick='undo();'/>
+				<kbd>u</kbd>
+			</button>
+			<button>
+				<img src='zoom-out.png' alt='zoom out' onclick='zoomOut();'/>
+				<kbd>z</kbd>
+			</button>
+			<button>
+				<img src='zoom-in.png' alt='zoom in' onclick='zoomIn();'/>
+				<kbd>x</kbd>
+			</button>
+			<br />
+			<b><img src='mouse.png' style='vertical-align:middle'> hold and drag your mouse to pan around</b>
+		</aside>
+		<script src='main.js'></script>
+	</body>
+</html>

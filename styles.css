@@ -1,0 +1,35 @@
+html, body {
+	height: 100%;
+}
+body {
+	margin: 0;
+}
+#controls {
+	position: fixed;
+	left: 20px;
+	bottom: 20px;
+}
+#controls button {
+	position: relative;
+	background: transparent;
+	border: 0;
+	border-radius: 5px;
+	padding: 8px;
+	cursor: pointer;
+}
+#controls button:hover {
+	background: #00000020;
+}
+#controls button:hover:active {
+	background: #00000033;
+}
+#controls kbd {
+	position: absolute;
+	right: 4px;
+	bottom: 4px;
+	border: 1px solid #AAAAAA;
+	background: linear-gradient(#EEEEEE, #CCCCCC);
+	font: 20px "Menlo", monospace;
+	padding: 0 6px;
+	border-radius: 4px;
+}
