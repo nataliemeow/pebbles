@@ -115,10 +115,10 @@ function draw(pebbleXy) {
 		drawPebble(pebble);
 	
 	ctx.fillStyle = 'black';
-	ctx.font = `${80 * devicePixelRatio}px ${font}`;
+	ctx.font = `${60 * devicePixelRatio}px ${font}`;
 	ctx.textAlign = 'center';
-	ctx.textBaseline = 'bottom';
-	ctx.fillText(pebbleN, size.x / 2, size.y - 30 * devicePixelRatio);
+	ctx.textBaseline = 'top';
+	ctx.fillText(pebbleN, size.x / 2, 10 * devicePixelRatio);
 }
 
 function mouseDown(e) {
