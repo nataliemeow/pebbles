@@ -293,6 +293,6 @@ canvas.addEventListener('touchend', e => {
 });
 
 for (let id of ['undo', 'zoomIn', 'zoomOut', 'clear']) {
-	document.getElementById(id).addEventListener('click', () => this[id]());
-	document.getElementById(id).addEventListener('touchend', () => this[id]());
+	document.getElementById(id).addEventListener('click', this[id]);
+	// document.getElementById(id).addEventListener('touchend', this[id]);
 }
