@@ -9,17 +9,21 @@
 	<body>
 		<canvas width='800' height='800' id='canvas'></canvas>
 		<aside id='controls'>
-			<button>
-				<img src='undo.png' alt='undo' onclick='undo();'/>
-				<kbd>u</kbd>
-			</button>
-			<button>
-				<img src='zoom-out.png' alt='zoom out' onclick='zoomOut();'/>
+			<button id='undo'>
+				<img src='undo.png' alt='undo' />
 				<kbd>z</kbd>
 			</button>
-			<button>
-				<img src='zoom-in.png' alt='zoom in' onclick='zoomIn();'/>
+			<button id='zoomOut'>
+				<img src='zoom-out.png' alt='zoom out' />
 				<kbd>x</kbd>
+			</button>
+			<button id='zoomIn'>
+				<img src='zoom-in.png' alt='zoom in' />
+				<kbd>c</kbd>
+			</button>
+			<button id='clear'>
+				<img src='clear.png' alt='clear'/>
+				<kbd>v</kbd>
 			</button>
 			<br />
 			<b><img src='mouse.png' style='vertical-align:middle'> hold and drag your mouse to pan around</b>

@@ -39,32 +39,45 @@ class Pebble {
 	}
 }
 
-let isPanning = false;
-
-let pebbles = [
-	new Pebble(1, new Vector(0, 0)),
-	new Pebble(1, new Vector(2, 2))
-];
-let pebbleN = 2;
-
-let size = new Vector(document.documentElement.clientWidth, document.documentElement.clientHeight);
-let cellScale = Vector.mul(new Vector(48, 48), new Vector(devicePixelRatio, devicePixelRatio));
-
-const font = `"Charis SIL", "Latin Modern Roman", "CMU Serif", P052, "Palatino Linotype", Palatino, Georgia, "Times New Roman", Times, serif`;
-
-let pan = new Vector(size.x / 2, size.y / 2);
-
-let isMouseDown = false;
-
-let prevMouseXy = null;
-let originMouseXy = null;
-
 function setCursor(cursor) {
 	document.documentElement.style.cursor = cursor;
 	currentCursor = cursor;
 }
-let currentCursor;
-setCursor('pointer');
+
+let
+	pebbles, pebbleN,
+	size, cellScale,
+	font,
+	isPanning, pan,
+	isMouseDown, prevMouseXy, originMouseXy,
+	currentCursor;
+
+function init() {
+	pebbles = [
+		new Pebble(1, new Vector(0, 0)),
+		new Pebble(1, new Vector(2, 2))
+	];
+
+	pebbleN = 2;
+
+	size = new Vector(document.documentElement.clientWidth, document.documentElement.clientHeight);
+	cellScale = Vector.mul(new Vector(48, 48), new Vector(devicePixelRatio, devicePixelRatio));
+
+	font = `"Charis SIL", "Latin Modern Roman", "CMU Serif", P052, "Palatino Linotype", Palatino, Georgia, "Times New Roman", Times, serif`;
+
+	isPanning = false;
+	pan = new Vector(size.x / 2, size.y / 2);
+
+	isMouseDown = false;
+
+	prevMouseXy = null;
+	originMouseXy = null;
+
+	currentCursor;
+	setCursor('pointer');
+	
+	draw();
+}
 
 function drawPebble(pebble, faint) {
 	let drawXy = Vector.add(
@@ -213,20 +226,41 @@ function zoomIn() {
 	draw();
 }
 
+function clear() {
+	let opacity = 1;
+	let intFade = setInterval(() => {
+		opacity -= 0.05;
+		if (opacity <= 0) {
+			clearInterval(intFade);
+			
+			init();
+			opacity = 0;
+			let intBloom = setInterval(() => {
+				opacity += 0.05;
+				if (opacity >= 1) clearInterval(intBloom);
+				canvas.style.opacity = opacity;
+			}, 1000 / 60);
+		}
+		canvas.style.opacity = opacity;
+	}, 1000 / 60);
+}
+
 function keyDown(e) {
-	if (e.code === 'KeyU') undo();
-	if (e.code === 'KeyZ') zoomOut();
-	if (e.code === 'KeyX') zoomIn();
+	if (e.code === 'KeyZ') undo();
+	if (e.code === 'KeyX') zoomOut();
+	if (e.code === 'KeyC') zoomIn();
+	if (e.code === 'KeyV') clear();
 }
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-draw();
+init();
 setInterval(draw, 500);
 
 canvas.addEventListener('mousedown', mouseDown);
 canvas.addEventListener('mousemove', mouseMove);
 canvas.addEventListener('mouseup', mouseUp);
+document.addEventListener('keydown', keyDown);
 
 // touchscreen compatibility glue
 
@@ -258,4 +292,7 @@ canvas.addEventListener('touchend', e => {
 	})
 });
 
-document.addEventListener('keydown', keyDown);
+for (id of ['undo', 'zoomIn', 'zoomOut', 'clear']) {
+	document.getElementById(id).addEventListener('click', this[id]);
+	document.getElementById(id).addEventListener('touchstart', this[id]);
+}
