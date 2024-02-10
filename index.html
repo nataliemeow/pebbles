@@ -4,26 +4,62 @@
 		<!-- <meta name='viewport' content='width=device-width, initial-scale=1' /> -->
 		<meta name='charset' content='utf-8' />
 		<link rel='stylesheet' href='styles.css' />
-		<title>A Pebble Game</title>
+		<title>The Pebble Game</title>
 	</head>
 	<body>
+		<div id='popup'>
+			<div id='message'>
+				<h2 style='text-align:center;margin-bottom:0'>The Pebble Game (English)</h1>
+				<p style='font-style:italic;text-align:center;font-size:0.85em;margin:0 0 0.67em 0'>also known as the Stepping Stone Game</p>
+				<p>A game about placing pebbles around each other in a grid. The steps to play follow:</p>
+				<ul>
+					<li>Brown pebbles worth <b>1 point</b>.</li>
+					<li>White pebbles are <b>labelled</b> with the number of points they're worth.</li>
+					<li>Place a number of <b>brown</b> pebbles on the grid.</li>
+					<li>Place as many <b>consecutively numbered</b>, <b>white</b> pebbles as you can, with the rule that <b>the sum of the points of the pebbles around the new pebble must total up to the points of the new pebble</b>.</li>
+				</ul>
+				<p>Originally, this was a mathematical problem originally proposed by Neil Sloane, founder of <a href='https://oeis.org/'>OEIS</a> | <a href='https://www.youtube.com/watch?v=m4Uth-EaTZ8'>&raquo;</a></p>
+				<hr />
+				<h2>Çakıltaşı Oyunu (Türkçe)</h2>
+				<p>Bir tablo üzerinde birbirinin etrafına çakıltaşı koyma hakkında bir oyundur. Oynamak için şu adımlar uygulanır:</p>
+				<ul>
+					<li>Kahverengi taşlar <b>1 puandır</b>.</li>
+					<li>Beyaz taşların puanları <b>üzerlerinde yazmaktadır.</b></li>
+					<li>Başlamak için tabloya bir miktar <b>kahverengi</b> taş yerleştir.</li>
+					<li>Tabloya yerleştirebildiğiniz kadar <b>ardışık sayılı</b>, <b>beyaz</b> taşı öyle bir yerleştirin ki <b>yeni taşın etrafındaki taşların puanlarının toplamı yeni taşın puanına denk gelsin.</b></li>
+				</ul>
+				<p>Orijinali <a href='https://oeis.org/'>OEIS</a> kurucusu Neil Sloane tarafından ortaya koyulan bir matematiksel problemdir | <a href='https://www.youtube.com/watch?v=m4Uth-EaTZ8'>&raquo;</a></p>
+				<div style='text-align:center'>
+					<button onclick='document.getElementById("popup").style.display = "none"'>Okay | Tamam</button>
+				</div>
+			</div>
+		</div>
 		<canvas width='800' height='800' id='canvas'></canvas>
 		<aside id='controls'>
 			<button id='undo'>
 				<img src='undo.png' alt='undo' />
-				<kbd>z</kbd>
+				<span class='desc'>undo<br />geri al <kbd>z</kbd></span>
 			</button>
 			<button id='zoomOut'>
 				<img src='zoom-out.png' alt='zoom out' />
-				<kbd>x</kbd>
+				<span class='desc'>zoom out<br />küçült <kbd>x</kbd></span>
 			</button>
 			<button id='zoomIn'>
 				<img src='zoom-in.png' alt='zoom in' />
-				<kbd>c</kbd>
+				<span class='desc'>zoom in<br />büyüt <kbd>c</kbd></span>
 			</button>
 			<button id='clear'>
 				<img src='clear.png' alt='clear'/>
-				<kbd>v</kbd>
+				<span class='desc'>clear<br />sil <kbd>v</kbd></span>
+			</button>
+			<button id='save'>
+				<img src='save.png' alt='save'/>
+				<span class='desc'>save<br />kaydet <kbd>n</kbd></span>
+			</button>
+			<div style='display:inline-block;width:48px'></div>
+			<button id='done'>
+				<img src='done.png' alt='clear'/>
+				<span class='desc'>done<br />tamam <kbd>b</kbd></span>
 			</button>
 			<br />
 			<b><img src='mouse.png' style='vertical-align:middle'> hold and drag your mouse to pan around</b>

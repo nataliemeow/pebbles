@@ -17,11 +17,12 @@ body {
 	bottom: 20px;
 }
 #controls button {
+	font: inherit;
 	position: relative;
 	background: transparent;
 	border: 0;
 	border-radius: 5px;
-	padding: 8px;
+	padding: 8px 8px 36px 8px;
 	cursor: pointer;
 }
 #controls button:hover {
@@ -30,14 +31,37 @@ body {
 #controls button:hover:active {
 	background: #00000033;
 }
-#controls kbd {
+#controls .desc {
+	text-align: left;
 	position: absolute;
-	right: 4px;
+	left: 4px;
 	bottom: 4px;
+	color: black;
+	border-radius: 4px;
+}
+kbd {
+	padding: 0 .3em;
+	font: 20px "Menlo", monospace;
 	border: 1px solid #AAAAAA;
 	background: linear-gradient(#EEEEEE, #CCCCCC);
-	font: 20px "Menlo", monospace;
-	color: black;
-	padding: 0 .3em;
-	border-radius: 4px;
+}
+
+#popup {
+	z-index: 1000;
+	background: #fffa;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+#message {
+	max-width: 600px;
+	padding: 10px 20px;
+	background: white;
+	border: 1px solid #ccc;
+	box-shadow: 0 5px 10px #0004;
 }

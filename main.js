@@ -16,10 +16,10 @@ class Vector {
 		return new Vector(a.x / b.x, a.y / b.y);
 	}
 	static lt(a, b) {
-		return a.x < b.x || a.y < b.y;
+		return a.x < b.x && a.y < b.y;
 	}
 	static gt(a, b) {
-		return a.x > b.x || a.y > b.y;
+		return a.x > b.x && a.y > b.y;
 	}
 	static eq(a, b) {
 		return a.x == b.x && a.y == b.y;
@@ -45,6 +45,7 @@ function setCursor(cursor) {
 }
 
 let
+	isPlacingBrowns,
 	pebbles, pebbleN,
 	size, cellScale,
 	font,
@@ -53,11 +54,11 @@ let
 	currentCursor;
 
 function init() {
-	pebbles = [
-		new Pebble(1, new Vector(0, 0)),
-		new Pebble(1, new Vector(2, 2))
-	];
+	document.getElementById('done').style.display = '';
+	
+	isPlacingBrowns = true;
 
+	pebbles = [];
 	pebbleN = 2;
 
 	size = new Vector(document.documentElement.clientWidth, document.documentElement.clientHeight);
@@ -104,7 +105,7 @@ function drawPebble(pebble, faint) {
 	);
 	ctx.stroke();
 	
-	ctx.fillStyle = faint ? '#888888' : 'black';
+	ctx.fillStyle = 'black';
 	ctx.font = `${cellScale.x / 2}px ${font}`;
 	ctx.textAlign = 'center';
 	ctx.textBaseline = 'middle';
@@ -131,7 +132,9 @@ function draw(pebbleXy) {
 	ctx.font = `${60 * devicePixelRatio}px ${font}`;
 	ctx.textAlign = 'center';
 	ctx.textBaseline = 'top';
-	ctx.fillText(pebbleN, size.x / 2, 10 * devicePixelRatio);
+
+	let text = isPlacingBrowns ? '1' : pebbleN;
+	ctx.fillText(text, size.x / 2, 10 * devicePixelRatio);
 }
 
 function mouseDown(e) {
@@ -179,33 +182,34 @@ function mouseUp(e) {
 	}
 	
 	let mouseXy = new Vector(e.clientX, e.clientY);
-	let pebble = new Pebble(
-		pebbleN,
-		Vector.floor(Vector.div(Vector.sub(mouseXy, pan), cellScale))
-	);
-
-	if (pebbles.find(p => Vector.eq(p.xy, pebble.xy))) return;
+	let pebbleXy = Vector.floor(Vector.div(Vector.sub(mouseXy, pan), cellScale))
 	
-	let total = 0;
-	for (let cx = pebble.xy.x - 1; cx <= pebble.xy.x + 1; cx += 1) {
-		for (let cy = pebble.xy.y - 1; cy <= pebble.xy.y + 1; cy += 1) {
-			let check = new Vector(cx, cy);
-			
-			if (Vector.eq(check, pebble.xy)) continue;
-			
-			let checkPebble =
-				pebbles.find(p => Vector.eq(p.xy, check)) ||
-				new Pebble(0, check);
+	if (pebbles.find(p => Vector.eq(p.xy, pebbleXy))) return;
 
-			total += checkPebble.n;
+	if (isPlacingBrowns) {
+		let pebble = new Pebble(1, pebbleXy);
+		pebbles.push(pebble);
+	} else {
+		let pebble = new Pebble(pebbleN, pebbleXy);
+		let total = 0;
+		for (let cx = pebble.xy.x - 1; cx <= pebble.xy.x + 1; cx += 1) {
+			for (let cy = pebble.xy.y - 1; cy <= pebble.xy.y + 1; cy += 1) {
+				let check = new Vector(cx, cy);
+				
+				if (Vector.eq(check, pebble.xy)) continue;
+				
+				let checkPebble =
+					pebbles.find(p => Vector.eq(p.xy, check)) ||
+					new Pebble(0, check);
+
+				total += checkPebble.n;
+			}
 		}
+		if (total !== pebbleN) return;
+		pebbleN++;
+		pebbles.push(pebble);
 	}
-	if (total !== pebbleN)
-		return;
 	
-	pebbles.push(pebble);
-	
-	pebbleN++;
 	draw();
 }
 
@@ -245,11 +249,18 @@ function clear() {
 	}, 1000 / 60);
 }
 
+function done() {
+	document.getElementById('done').style.display = 'none';
+	isPlacingBrowns = false;
+	draw();
+}
+
 function keyDown(e) {
 	if (e.code === 'KeyZ') undo();
 	if (e.code === 'KeyX') zoomOut();
 	if (e.code === 'KeyC') zoomIn();
 	if (e.code === 'KeyV') clear();
+	if (e.code === 'KeyB') done();
 }
 
 const canvas = document.getElementById("canvas");
@@ -292,7 +303,7 @@ canvas.addEventListener('touchend', e => {
 	})
 });
 
-for (let id of ['undo', 'zoomIn', 'zoomOut', 'clear']) {
+for (let id of ['undo', 'zoomIn', 'zoomOut', 'clear', 'done']) {
 	document.getElementById(id).addEventListener('click', this[id]);
 	// document.getElementById(id).addEventListener('touchend', this[id]);
 }
