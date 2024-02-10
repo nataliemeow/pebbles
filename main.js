@@ -116,6 +116,9 @@ function draw(pebbleXy) {
 	size = new Vector(document.documentElement.clientWidth, document.documentElement.clientHeight);
 	canvas.width = size.x;
 	canvas.height = size.y;
+	ctx.fillStyle = 'white';
+	ctx.fillRect(0, 0, size.x, size.y);
+
 	ctx.lineWidth = Math.floor(cellScale.x / 32);
 
 	for (let x = pan.x % cellScale.x - cellScale.x - 1; x < size.x; x += cellScale.x) {
@@ -249,6 +252,13 @@ function clear() {
 	}, 1000 / 60);
 }
 
+function save() {
+	let link = document.createElement('a');
+	link.download = 'screenshot.png';
+	link.href = canvas.toDataURL('png');
+	link.click();
+}
+
 function done() {
 	document.getElementById('done').style.display = 'none';
 	isPlacingBrowns = false;
@@ -260,7 +270,8 @@ function keyDown(e) {
 	if (e.code === 'KeyX') zoomOut();
 	if (e.code === 'KeyC') zoomIn();
 	if (e.code === 'KeyV') clear();
-	if (e.code === 'KeyB') done();
+	if (e.code === 'KeyB') save();
+	if (e.code === 'KeyN') done();
 }
 
 const canvas = document.getElementById("canvas");
@@ -303,7 +314,7 @@ canvas.addEventListener('touchend', e => {
 	})
 });
 
-for (let id of ['undo', 'zoomIn', 'zoomOut', 'clear', 'done']) {
+for (let id of ['undo', 'zoomIn', 'zoomOut', 'clear', 'save', 'done']) {
 	document.getElementById(id).addEventListener('click', this[id]);
 	// document.getElementById(id).addEventListener('touchend', this[id]);
 }
